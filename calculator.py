@@ -11,3 +11,6 @@ def divide(x, y):
 	if(y==0):
 		return "Error"
 	return x/y
+	
+def sqr(x):
+	return x^(1/2)
