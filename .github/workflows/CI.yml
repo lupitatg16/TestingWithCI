@@ -1,0 +1,37 @@
+name: CI
+
+on: 
+  push:
+    branches:
+      - main
+  #pull_request: #Process of integrating new code into the main repository, review code before merge into main
+
+jobs: #all the things that will execute on the pipeline
+
+  run-test: 
+    strategy:
+      fail-fast: false #execute other jobs even if this job fails
+      matrix:
+        os: [windows-latest] #in which OS the CI can run
+        python-versions: #in which versions we want to test the code
+          - "3.9"
+          - "3.10"
+          - "3.11"
+    name: Test
+    runs-on: ${{ matrix.os }} #Determine that it will run on the specified OS
+
+    steps:
+      - name: Checkout code #Retrieve source code from repository
+        uses: actions/checkout@v3 #Use Github Action for checkout
+
+      - name: Set up Pyhton
+        uses: actions/setup-python@v4
+        with: 
+          python-version: ${{ matrix.python-version }} #use each determined Python version
+
+      #- name: Install dependencies
+      #  run: pip install -r requirements.txt 
+
+      - name: Run tests
+        run: python -m unittest discover
+        working-directory: ${{ github.workspace }}
